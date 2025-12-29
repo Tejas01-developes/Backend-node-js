@@ -3,6 +3,8 @@ import http from 'http';
 import './Connections/mysql.js';
 import { frontend } from './Connections/cors.js';
 import router from './routes/routes.js';
+import dotenv from 'dotenv'
+dotenv.config();
 
 const app=express();
 
