@@ -13,7 +13,7 @@ export const accesstoken=(user)=>{
 
 
 export const refreshtoken=(user)=>{
-    jwt.sign(
+   return jwt.sign(
         {email:user.email},
         process.env.REFRESH_KEY,
         {expiresIn:'7d'}

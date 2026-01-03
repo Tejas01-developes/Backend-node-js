@@ -1,20 +1,53 @@
-import jwt from 'jsonwebtoken';
-import { accesstoken } from '../tokens/tokens';
+// import jwt from 'jsonwebtoken';
+// import dotenv from 'dotenv';
+// dotenv.config();
 
+
+// export const cookiefilter=(req,resp,next)=>{
+//     const cookie=req.cookies.refresh;
+
+//     if(!cookie){
+//         return resp.status(400).json({success:false,message:"no access token"})
+//     }
+
+//     jwt.verify(cookie,process.env.REFRESH_KEY,(err,decode)=>{
+//         if(err){
+//             return resp.status(400).json({success:false,message:"cookie is invalid"})
+//         }
+//         req.user=decode;
+//         console.log(req.user)
+//         next();
+//     })
+// }
+
+import jwt from 'jsonwebtoken';
+
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const cookiefilter=(req,resp,next)=>{
-    const cookie=req.cookies.refresh;
+    const refreshtoken=req.cookies.refresh;
 
-    if(!cookie){
-        return resp.status(400).json({success:false,message:"no access token"})
+    if(!refreshtoken){
+        return resp.status(400).json({success:false,message:"token is not avalible"})
     }
-
-    jwt.verify(cookie,process.env.REFRESH_KEY,(err,decode)=>{
+    jwt.verify(refreshtoken,process.env.REFRESH_KEY,(err,decode)=>{
         if(err){
-            return resp.status(400).json({success:false,message:"cookie is invalid"})
+            return resp.status(400).json({success:false,message:"token is invalid"})
         }
-        req.user=decode;
-        
+  
+     
+
+        req.user=decode 
+       
         next();
     })
+
+   
 }
+
+
+
+
+
+

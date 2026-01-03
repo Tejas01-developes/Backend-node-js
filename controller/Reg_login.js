@@ -73,15 +73,56 @@ export const loginuser=async(req,resp)=>{
             if(!verify){
                 return resp.status(400).json({success:false,message:"password is incorrect"})
             }
-            const access=accesstoken(result[0].email);
-            const refresh=refreshtoken(result[0].email);
+            const user=result[0].email;
+            const access=accesstoken({email});
+            const refresh=refreshtoken({email});
+    
 
+db.query(
+    'SELECT refresh FROM REFRESHTOKEN WHERE tokenuser=?',
+    [email],
+    (err,result)=>{
+        if(err){
+            return resp.status(400).json({success:false,message:true})
+        }
+        if(result.length === 0){
+            db.query(
+                'INSERT INTO refreshtoken (tokenuser,refresh) VALUES (?,?)',
+                [email,refresh],
+                (err)=>{
+                    if(err){
+                        return resp.status(400).json({success:false,message:"token not added"})
+                    }
+                    // return resp.status(200).json({success:true,message:"token set"})
+                }
+            )
+        }else
+       {
+            db.query(
+                'UPDATE refreshtoken SET refresh=? WHERE tokenuser=?',
+                [refresh,email],
+                (err)=>{
+                    if(err){
+                        return resp.status(400).json({success:false,message:"update failed"})
+                    }
+                    // return resp.status(200).json({success:true,message:"token updated"})
+                }
+            )
+        }
+    }
+)
+
+           
+            console.log("access "+ access )
+            console.log("refresh " + refresh)
             resp.cookie("refresh",refresh,{
                 httpOnly:true,
                 secure:true,
                 path:"/",
                 sameSite:"Lax"
             })
+           
+
             return resp.status(200).json({success:true,message:"login success",access:access})
 
 

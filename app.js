@@ -4,13 +4,23 @@ import './Connections/mysql.js';
 import { frontend } from './Connections/cors.js';
 import router from './routes/routes.js';
 import dotenv from 'dotenv'
+import cookieParser from 'cookie-parser';
+import { Server } from 'socket.io';
+
 dotenv.config();
 
 const app=express();
 
 app.use(express.urlencoded({extended:true}));
 app.use(json());
+app.use(cookieParser())
 const server=http.createServer(app);
+const io=new Server(server,{
+    cors:{
+        origin:"http://localhost:5173",
+        credentials:true
+    }
+})
 app.use(frontend)
 app.use("/apis",router)
 
