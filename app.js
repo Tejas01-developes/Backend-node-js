@@ -21,6 +21,26 @@ const io=new Server(server,{
         credentials:true
     }
 })
+const onlineuser=new Map();
+io.on("connection",(socket)=>{
+console.log("socket connected",socket.id)
+
+socket.on("join",(email)=>{
+    onlineuser.set(email,socket.id)
+    console.log("joined",email)
+})
+
+
+})
+
+
+
+
+
+
+
+
+
 app.use(frontend)
 app.use("/apis",router)
 

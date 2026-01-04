@@ -73,7 +73,7 @@ db.query(
         if(err){
             return resp.status(400).json({success:false,message:"db error"})
         }
-        const friends=result;
+        const friends=result
         return resp.status(200).json({success:true,message:"list of friends",friends:friends})
     }
 )
